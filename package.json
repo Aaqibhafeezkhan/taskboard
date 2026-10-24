@@ -1,0 +1,30 @@
+{
+  "name": "taskboard",
+  "version": "1.0.0",
+  "description": "A real-time team Kanban where every card can get its own AI browser agent, with a live view you can take over.",
+  "license": "MIT",
+  "author": "Isaac Lins (https://isaaclins.com)",
+  "homepage": "https://github.com/isaaclins/taskboard#readme",
+  "repository": { "type": "git", "url": "git+https://github.com/isaaclins/taskboard.git" },
+  "bugs": { "url": "https://github.com/isaaclins/taskboard/issues" },
+  "keywords": ["kanban", "ai-agents", "browser-agent", "realtime", "collaboration", "bun", "react", "sqlite"],
+  "private": true,
+  "type": "module",
+  "engines": { "bun": ">=1.2" },
+  "scripts": {
+    "start": "bun server/main.ts",
+    "dev": "bun --watch server/main.ts",
+    "build": "cd web && npm run build",
+    "demo": "cd web && npm run mock",
+    "check": "bunx tsc -p server --noEmit && cd web && npx tsc -b",
+    "test": "bun test",
+    "testbed": "bun testbed/serve.ts"
+  },
+  "dependencies": {
+    "sharp": "^0.34.5"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.9.0"
+  }
+}

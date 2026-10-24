@@ -1,0 +1,114 @@
+<!doctype html>
+<!-- Testbed: behaves like the event's remote-desktop environment (noVNC / Guacamole / Kasm style).
+     A cookie banner, a ~30 s boot, then a desktop drawn entirely into ONE <canvas>: the DOM holds no text to read.
+     Three questions need clicking, typing and counting. Expected answers: Q1 ORCA-41, Q2 PLUM-7731, Q3 7.
+     ?boot=<seconds> changes the boot time. -->
+<html><head><meta charset="utf-8"><title>Lab environment</title>
+<style>
+  html,body{margin:0;height:100%;background:#1f2328;font:14px -apple-system,Segoe UI,sans-serif;color:#c9d1d9}
+  #bar{height:34px;display:flex;align-items:center;gap:10px;padding:0 12px;background:#161b22;border-bottom:1px solid #30363d}
+  #wrap{position:absolute;top:35px;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center}
+  canvas{background:#000;outline:none}
+  #cookie{position:fixed;left:16px;right:16px;bottom:16px;background:#fff;color:#111;border-radius:10px;padding:14px 16px;display:flex;gap:12px;align-items:center;box-shadow:0 10px 30px #0008;z-index:5}
+  #cookie button{padding:8px 14px;border-radius:6px;border:0;background:#2f81f7;color:#fff;font-weight:600;cursor:pointer}
+</style></head>
+<body>
+<div id="bar"><span>●</span><span>lab-07</span></div>
+<div id="wrap"><canvas id="display" width="1280" height="720" tabindex="0"></canvas></div>
+<div id="cookie"><span style="flex:1">We use cookies to keep your session running.</span><button id="ok">Accept all</button></div>
+<script>
+(() => {
+  const cv = document.getElementById('display'), g = cv.getContext('2d');
+  const BOOT = Number(new URLSearchParams(location.search).get('boot') ?? 30) * 1000;
+  const t0 = performance.now();
+  document.getElementById('ok').onclick = () => document.getElementById('cookie').remove();
+
+  const S = { revealed: false, focus: null, user: '', pass: '', loggedIn: false, err: '' };
+  const btn = (x, y, w, h, label, on) => ({ x, y, w, h, label, on });
+  let hits = [];
+  const red = new Set([1, 4, 6, 9, 13, 18, 22]); // 7 red squares in a 6x4 grid
+  const font = (px, w = 400) => (g.font = `${w} ${px}px -apple-system,Segoe UI,sans-serif`);
+
+  function draw() {
+    const t = performance.now() - t0;
+    hits = [];
+    if (t < BOOT) {
+      g.fillStyle = '#000'; g.fillRect(0, 0, 1280, 720);
+      g.fillStyle = '#9da7b3'; font(18); g.textAlign = 'center';
+      g.fillText('Starting environment…', 640, 340);
+      const p = Math.min(1, t / BOOT);
+      g.fillStyle = '#30363d'; g.fillRect(440, 370, 400, 8);
+      g.fillStyle = '#2f81f7'; g.fillRect(440, 370, 400 * p, 8);
+      g.textAlign = 'left';
+      return requestAnimationFrame(draw);
+    }
+    // desktop
+    const grd = g.createLinearGradient(0, 0, 1280, 720); grd.addColorStop(0, '#2b3a55'); grd.addColorStop(1, '#4a3b5c');
+    g.fillStyle = grd; g.fillRect(0, 0, 1280, 720);
+    g.fillStyle = '#11151c'; g.fillRect(0, 690, 1280, 30);
+    font(13); g.fillStyle = '#c9d1d9'; g.fillText('Activities      Lab Quiz', 12, 710);
+    // sticky note with credentials
+    g.fillStyle = '#ffe680'; g.fillRect(40, 60, 220, 120);
+    g.fillStyle = '#3a3000'; font(15, 700); g.fillText('Lab login', 56, 88);
+    font(14); g.fillText('user:  analyst', 56, 116); g.fillText('pass:  tidepool', 56, 140);
+    // window
+    g.fillStyle = '#f6f8fa'; g.fillRect(320, 50, 900, 610);
+    g.fillStyle = '#d0d7de'; g.fillRect(320, 50, 900, 34);
+    g.fillStyle = '#24292f'; font(14, 600); g.fillText('Lab Quiz — answer all three questions', 336, 72);
+    // Q1
+    font(16, 700); g.fillText('Q1. Press the button and read the code.', 344, 120);
+    if (!S.revealed) hits.push(drawBtn(btn(344, 132, 150, 36, 'Reveal code', () => (S.revealed = true))));
+    else { font(22, 700); g.fillStyle = '#0a7a3d'; g.fillText('ORCA-41', 344, 160); g.fillStyle = '#24292f'; }
+    // Q2
+    font(16, 700); g.fillText('Q2. Log in with the account on the yellow note. The token appears after login.', 344, 215);
+    if (!S.loggedIn) {
+      hits.push(field(344, 230, 'Username', 'user'));
+      hits.push(field(600, 230, 'Password', 'pass', true));
+      hits.push(drawBtn(btn(856, 236, 110, 36, 'Log in', () => {
+        if (S.user === 'analyst' && S.pass === 'tidepool') { S.loggedIn = true; S.err = ''; } else S.err = 'Wrong username or password';
+      })));
+      if (S.err) { font(14); g.fillStyle = '#cf222e'; g.fillText(S.err, 344, 300); g.fillStyle = '#24292f'; }
+    } else { font(18, 700); g.fillStyle = '#0a7a3d'; g.fillText('Welcome analyst. Your token: PLUM-7731', 344, 262); g.fillStyle = '#24292f'; }
+    // Q3
+    font(16, 700); g.fillText('Q3. How many squares in this grid are red?', 344, 345);
+    for (let i = 0; i < 24; i++) {
+      const x = 344 + (i % 6) * 62, y = 362 + Math.floor(i / 6) * 62;
+      g.fillStyle = red.has(i) ? '#d1242f' : (i % 3 === 0 ? '#f0883e' : '#8c959f'); g.fillRect(x, y, 52, 52);
+    }
+    g.fillStyle = '#24292f';
+    requestAnimationFrame(draw);
+  }
+  function drawBtn(b) {
+    g.fillStyle = '#2f81f7'; g.beginPath(); g.roundRect(b.x, b.y, b.w, b.h, 6); g.fill();
+    g.fillStyle = '#fff'; font(15, 600); g.fillText(b.label, b.x + 14, b.y + b.h / 2 + 5); g.fillStyle = '#24292f';
+    return b;
+  }
+  function field(x, y, label, key, secret) {
+    const w = 240, h = 48;
+    font(12); g.fillStyle = '#57606a'; g.fillText(label, x, y + 12);
+    g.fillStyle = '#fff'; g.strokeStyle = S.focus === key ? '#2f81f7' : '#d0d7de'; g.lineWidth = S.focus === key ? 2 : 1;
+    g.fillRect(x, y + 18, w, 30); g.strokeRect(x, y + 18, w, 30);
+    g.fillStyle = '#24292f'; font(15);
+    const v = secret ? '•'.repeat(S[key].length) : S[key];
+    g.fillText(v + (S.focus === key && Math.floor(performance.now() / 500) % 2 ? '|' : ''), x + 8, y + 39);
+    return { x, y: y + 18, w, h: 30, on: () => (S.focus = key) };
+  }
+  const pos = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * 1280 / r.width, (e.clientY - r.top) * 720 / r.height]; };
+  cv.addEventListener('mousedown', e => {
+    cv.focus();
+    const [x, y] = pos(e);
+    const h = hits.find(b => x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h);
+    if (h) h.on(); else S.focus = null;
+  });
+  cv.addEventListener('keydown', e => {
+    if (!S.focus) return;
+    if (e.key === 'Backspace') S[S.focus] = S[S.focus].slice(0, -1);
+    else if (e.key === 'Tab') { e.preventDefault(); S.focus = S.focus === 'user' ? 'pass' : 'user'; }
+    else if (e.key === 'Enter') { const b = hits.find(b => b.label === 'Log in'); b && b.on(); }
+    else if (e.key.length === 1) S[S.focus] += e.key;
+    e.preventDefault();
+  });
+  requestAnimationFrame(draw);
+})();
+</script>
+</body></html>

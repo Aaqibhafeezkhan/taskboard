@@ -1,0 +1,89 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+
+/* easyUI-style light theme: white page, soft greys, pills, big radii. */
+@theme {
+  --font-sans: "Inter Variable", "Inter", -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, monospace;
+  --color-ink: #0a0a0a;
+  --color-muted: #71717a;
+  --color-faint: #a1a1aa;
+  --color-line: #e6e6e8;
+  --color-surface: #f4f4f5;
+  --color-surface2: #ececee;
+  --color-ok: #10b981;
+  --color-ok-bg: #ecfdf5;
+  --color-ok-line: #a7f3d0;
+  --color-ok-ink: #047857;
+  --color-warn: #d97706;
+  --color-warn-bg: #fffbeb;
+  --color-warn-line: #fde68a;
+  --color-warn-ink: #92400e;
+  --color-info: #2563eb;
+  --color-info-bg: #eff6ff;
+  --color-bad: #b91c1c;
+  --color-bad-bg: #fef2f2;
+  --color-bad-line: #fecaca;
+  --radius-card: 16px;
+  --radius-lane: 22px;
+  --shadow-card: 0 1px 2px #0000000a;
+  --shadow-pop: 0 12px 30px #0000001f;
+  --shadow-dialog: 0 30px 80px #0000003d;
+}
+
+:root {
+  --text-primary: #0a0a0a;
+  --text-muted: #71717a;
+  color-scheme: light;
+}
+
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  background: #fff;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01";
+}
+
+.focus-ring:focus-visible, button:focus-visible, a:focus-visible {
+  outline: 2px solid #2563eb55;
+  outline-offset: 2px;
+}
+
+/* thin scrollbars inside lanes and panels */
+.thin-scroll { scrollbar-width: thin; scrollbar-color: #d4d4d8 transparent; }
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+mark { background: #fef08a; color: inherit; border-radius: 3px; padding: 0 2px; }
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 #10b98166; }
+  70% { box-shadow: 0 0 0 6px #10b98100; }
+  100% { box-shadow: 0 0 0 0 #10b98100; }
+}
+.live-dot { animation: pulse-ring 1.8s ease-out infinite; }
+
+@keyframes amber-ring {
+  0% { box-shadow: 0 0 0 0 #d9770666; }
+  70% { box-shadow: 0 0 0 10px #d9770600; }
+  100% { box-shadow: 0 0 0 0 #d9770600; }
+}
+.help-pulse { animation: amber-ring 1.6s ease-out 2; }
+
+@keyframes mention-glow {
+  0%, 100% { box-shadow: inset 0 0 0 0 #2563eb00; }
+  50% { box-shadow: inset 0 0 0 2px #2563eb55, 0 0 24px #2563eb22; }
+}
+.mention-glow { animation: mention-glow 1.6s ease-in-out 2; }
+
+@keyframes caret { 50% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .live-dot, .help-pulse, .mention-glow { animation: none !important; }
+}

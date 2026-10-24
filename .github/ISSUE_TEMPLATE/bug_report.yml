@@ -1,0 +1,49 @@
+name: Bug report
+description: Something on the board or with an agent doesn't work as it should
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead. Screenshots help.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Start an agent on a card with ...
+        2. Take over ...
+        3. ...
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where
+      options:
+        - Board / cards
+        - Agents (start, live view, take over)
+        - Team chat / board agent
+        - Search
+        - Sign-in / deployment
+        - Demo (simulated backend)
+        - Something else
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      placeholder: v1.0.0 or a commit hash
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      placeholder: macOS 26, Bun 1.4, Aside 1.0, Chrome 140
+  - type: textarea
+    id: logs
+    attributes:
+      label: Server log
+      description: The lines around the problem from the server output. Remove anything private.
+      render: text

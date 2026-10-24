@@ -1,0 +1,22 @@
+#!/bin/bash
+# Create one card from screenshots: bin/card --title "…" --task "…" [--link URL] [--text "text read from shots"] [--notes "…"] shot1.png [shot2.png …]
+# Uses the owner token (TASKBOARD_OWNER_TOKEN, or the file in TASKBOARD_OWNER_TOKEN_FILE). TASKBOARD_URL defaults to
+# http://127.0.0.1:8823. Needs curl and jq.
+set -euo pipefail
+URL=${TASKBOARD_URL:-http://127.0.0.1:8823}
+T=${TASKBOARD_OWNER_TOKEN:-$(cat "${TASKBOARD_OWNER_TOKEN_FILE:-$HOME/.config/taskboard/owner-token}")}
+title= task= link= text= notes= shots=()
+while [ $# -gt 0 ]; do
+  case $1 in
+    --title) title=$2; shift 2;; --task) task=$2; shift 2;; --link) link=$2; shift 2;;
+    --text) text=$2; shift 2;; --notes) notes=$2; shift 2;; *) shots+=("$1"); shift;;
+  esac
+done
+[ -n "$title" ] || { echo "need --title" >&2; exit 2; }
+body=$(jq -n --arg title "$title" --arg task "$task" --arg link "$link" --arg text "$text" --arg notes "$notes" \
+  '{title:$title, task:$task, link:$link, screenshotText:$text, notes:$notes}')
+id=$(curl -sf -H "Authorization: Bearer $T" -H 'content-type: application/json' -d "$body" "$URL/api/cards" | jq -r .id)
+for f in "${shots[@]}"; do
+  curl -sf -H "Authorization: Bearer $T" -H "content-type: image/${f##*.}" --data-binary @"$f" "$URL/api/cards/$id/screenshots" >/dev/null
+done
+echo "$id"

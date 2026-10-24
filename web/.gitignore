@@ -1,0 +1,6 @@
+node_modules/
+dist/
+dist-mock/
+shots/
+.easyui-src/
+tsconfig.tsbuildinfo

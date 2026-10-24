@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install
+        run: |
+          bun install --frozen-lockfile
+          cd web && npm ci
+      - name: Type-check
+        run: npm run check
+      - name: Test
+        run: bun test
+      - name: Build web app
+        run: npm run build
+      - name: Build demo
+        run: cd web && npm run build:mock
