@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
-// Can be served under any sub-path (example.com/taskboard/, GitHub Pages), so every asset URL is relative.
+// Can be served under any sub-path (example.com/taskboard/), so every asset URL is relative.
 export default defineConfig({
   base: './',
   plugins: [react(), tailwindcss()],

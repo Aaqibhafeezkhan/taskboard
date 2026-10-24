@@ -31,7 +31,7 @@ The first public release.
 ### Running it
 - Built-in passcode sign-in, or sign-in through a reverse proxy.
 - Configurable model list (built in, a file, or a command).
-- Simulated backend for demos, deployed as a live demo on GitHub Pages.
+- Simulated backend for trying the board locally (`npm run demo`).
 - End-to-end API tests and CI.
 
 [1.0.0]: https://github.com/isaaclins/taskboard/releases/tag/v1.0.0
