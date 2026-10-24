@@ -25,7 +25,7 @@ export function TopBar() {
   const online = useMemo(() => users.filter((u) => u.online), [users]);
 
   return (
-    <header className="h-16 flex-none flex items-center gap-3.5 px-4 sm:pl-12 sm:pr-6 border-b border-line bg-white relative z-20">
+    <header className="h-16 flex-none flex items-center gap-2 px-3 sm:gap-3.5 sm:pl-12 sm:pr-6 border-b border-line bg-white relative z-20">
       <Logo />
       <RoundPill />
       {status !== 'open' && <Pill tone="amber" size="sm" className="hidden sm:inline-flex">reconnecting…</Pill>}
