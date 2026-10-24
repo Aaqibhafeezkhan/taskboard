@@ -53,8 +53,8 @@ export function MatrixTimer({ endsAt, className }: { endsAt: number; className?:
     <div className={cn('flex items-center gap-[3px] rounded-[9px] transition-colors', urgent && 'p-[3px] bg-[#ef4444] [&_span.bg-ink]:bg-[#7f1d1d]', className)}
       aria-label={`${h} hours ${m} minutes ${s} seconds left`} title="Time left">
       {txt.split('').map((ch, i) => ch === ':'
-        ? <em key={i} className={cn('not-italic font-bold px-px -mt-0.5', urgent ? 'text-white' : 'text-faint')}>:</em>
-        : <Tile key={i} ch={ch} i={i} reduce={reduce} />)}
+        ? <em key={i} className={cn('not-italic font-bold px-px -mt-0.5', i === 5 && 'hidden sm:inline-flex', urgent ? 'text-white' : 'text-faint')}>:</em>
+        : <span key={i} className={i >= 6 ? 'hidden sm:inline-flex' : 'inline-flex'}><Tile ch={ch} i={i} reduce={reduce} /></span>)}
     </div>
   );
 }
