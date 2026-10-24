@@ -7,7 +7,7 @@ Watch the agents work live, take over with one click, and keep the whole team in
 
 <p>
 <a href="https://github.com/isaaclins/taskboard/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/isaaclins/taskboard/actions/workflows/ci.yml/badge.svg"></a>
-<a href="https://isaaclins.github.io/taskboard/"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-10b981"></a>
+<a href="https://isaaclins.com/taskboard/"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-10b981"></a>
 <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-3b82f6"></a>
 <img alt="Bun" src="https://img.shields.io/badge/server-Bun%20%2B%20SQLite-f59e0b">
 <img alt="React" src="https://img.shields.io/badge/web-React%2019%20%2B%20Tailwind%204-8b5cf6">
@@ -15,14 +15,14 @@ Watch the agents work live, take over with one click, and keep the whole team in
 </p>
 
 <p>
-<a href="https://isaaclins.github.io/taskboard/"><b>Try the live demo</b></a> ·
+<a href="https://isaaclins.com/taskboard/"><b>Try the live demo</b></a> ·
 <a href="#quick-start">Quick start</a> ·
 <a href="docs/architecture.md">How it works</a> ·
 <a href="docs/api.md">API</a> ·
 <a href="docs/configuration.md">Configuration</a>
 </p>
 
-<a href="https://isaaclins.github.io/taskboard/"><img src="docs/media/tour.gif" alt="A tour of Taskboard: opening a card, watching its agent live, the live wall, search and the team chat" width="100%"></a>
+<a href="https://isaaclins.com/taskboard/"><img src="docs/media/tour.gif" alt="A tour of Taskboard: opening a card, watching its agent live, the live wall, search and the team chat" width="100%"></a>
 
 </div>
 
@@ -98,7 +98,7 @@ And also:
 ### See it in 30 seconds (no setup, no agents)
 
 The web app has a built-in simulated backend with a team, cards, agents and a live view. It is the same thing as
-the [live demo](https://isaaclins.github.io/taskboard/).
+the [live demo](https://isaaclins.com/taskboard/).
 
 ```sh
 git clone https://github.com/isaaclins/taskboard && cd taskboard/web
