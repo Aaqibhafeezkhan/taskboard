@@ -58,7 +58,7 @@ export function TopBar() {
         </div>
       </div>
       {/* B: people stack lifts on hover, new people slide in */}
-      <div className="hidden sm:flex items-center pl-1">
+      <div className={`hidden ${status === 'open' ? 'sm:flex' : 'lg:flex'} items-center pl-1`}>
         <AnimatePresence initial={false}>
           {online.map((u, i) => (
             <motion.span key={u.login} layout initial={{ opacity: 0, x: 8, scale: 0.6 }} animate={{ opacity: 1, x: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.6 }}
