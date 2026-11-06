@@ -25,7 +25,7 @@ export function TopBar() {
   const online = useMemo(() => users.filter((u) => u.online), [users]);
 
   return (
-    <header className="h-16 flex-none flex items-center gap-3.5 px-4 sm:pl-12 sm:pr-6 border-b border-line bg-white relative z-20">
+    <header className="h-16 flex-none flex items-center gap-2 px-3 sm:gap-3.5 sm:pl-12 sm:pr-6 border-b border-line bg-white relative z-20">
       <Logo />
       <RoundPill />
       {status !== 'open' && <Pill tone="amber" size="sm" className="hidden sm:inline-flex">reconnecting…</Pill>}
@@ -36,17 +36,17 @@ export function TopBar() {
           layoutId="search-box"
           transition={motionTransitions.springMorph}
           onClick={() => set({ searchOpen: true })}
-          className="hidden md:flex items-center gap-2 w-[420px] px-3.5 py-[9px] rounded-full bg-surface text-faint cursor-text hover:bg-surface2 transition-colors"
+          className="hidden lg:flex items-center gap-2 w-[420px] min-w-0 px-3.5 py-[9px] rounded-full bg-surface text-faint cursor-text hover:bg-surface2 transition-colors"
         >
-          <Search className="size-3.5" />
+          <Search className="size-3.5 shrink-0" />
           <span className="truncate">Search everything: cards, answers, agent steps…</span>
           <span className="flex-1" />
           <Kbd>⌘K</Kbd>
         </motion.button>
       )}
-      {searchOpen && <div className="hidden md:block w-[420px]" />}
-      <button onClick={() => set({ searchOpen: true })} className="md:hidden p-2 rounded-full bg-surface cursor-pointer" aria-label="Search"><Search className="size-4" /></button>
-      <div className="flex-1 hidden md:block" />
+      {searchOpen && <div className="hidden lg:block w-[420px]" />}
+      <button onClick={() => set({ searchOpen: true })} className="lg:hidden p-2 rounded-full bg-surface cursor-pointer" aria-label="Search"><Search className="size-4" /></button>
+      <div className="flex-1 hidden lg:block" />
       {round.endsAt && <MatrixTimer endsAt={round.endsAt} className="scale-[0.8] sm:scale-100 origin-right" />}
       <div className="hidden lg:flex flex-col gap-1">
         <span className="text-[11.5px] whitespace-nowrap">
@@ -58,7 +58,7 @@ export function TopBar() {
         </div>
       </div>
       {/* B: people stack lifts on hover, new people slide in */}
-      <div className="hidden sm:flex items-center pl-1">
+      <div className={`hidden ${status === 'open' ? 'sm:flex' : 'lg:flex'} items-center pl-1`}>
         <AnimatePresence initial={false}>
           {online.map((u, i) => (
             <motion.span key={u.login} layout initial={{ opacity: 0, x: 8, scale: 0.6 }} animate={{ opacity: 1, x: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.6 }}
